@@ -25,7 +25,11 @@
         res.send('GPS data updated');
       });
       
-
+      // Endpoint untuk mengirimkan data GPS ke frontend
+    app.get('/gps-data', (req, res) => {
+    res.json(gpsData);  // Kirimkan data GPS dalam format JSON
+    });
+  
     // Halaman utama untuk menampilkan data GPS
     app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html')); // Menyajikan file HTML
