@@ -1,11 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Gunakan body-parser untuk menangani data POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Menyajikan file statis (seperti CSS dan JS) dari folder "public"
+app.use(express.static('public'));
 
 // Simpan data GPS dalam variabel
 let gpsData = {
@@ -23,27 +27,7 @@ app.post('/update-gps', (req, res) => {
 
 // Halaman utama untuk menampilkan data GPS
 app.get('/', (req, res) => {
-  res.send(`
-    <html>
-      <head>
-        <title>Real-Time GPS</title>
-      </head>
-      <body>
-        <h1>Real-Time GPS Location</h1>
-        <p><strong>Latitude:</strong> ${gpsData.latitude}</p>
-        <p><strong>Longitude:</strong> ${gpsData.longitude}</p>
-        <script>
-          setInterval(() => {
-            fetch('/')
-              .then(response => response.text())
-              .then(data => {
-                document.body.innerHTML = data;
-              });
-          }, 1000);
-        </script>
-      </body>
-    </html>
-  `);
+  res.sendFile(path.join(__dirname, 'index.html')); // Menyajikan file HTML
 });
 
 // Start the server

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time GPS Location</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Real-Time GPS Location</h1>
+    </header>
+
+    <div class="content">
+        <div class="gps-data">
+            <p><strong>Latitude:</strong> <span id="latitude">${gpsData.latitude}</span></p>
+            <p><strong>Longitude:</strong> <span id="longitude">${gpsData.longitude}</span></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Powered by ESP32 and Glitch</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
