@@ -1,41 +1,30 @@
-    const express = require('express');
-    const bodyParser = require('body-parser');
-    const path = require('path');
-    const app = express();
-    const port = process.env.PORT || 3000;
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const port = process.env.PORT || 3000;
 
-    // Gunakan body-parser untuk menangani data POST
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+app.use(bodyParser.json());  // Untuk mengurai JSON yang dikirim oleh ESP32
 
-    // Menyajikan file statis (seperti CSS dan JS) dari folder "public"
-    app.use(express.static('public'));
+// Menyimpan data GPS dalam variabel
+let gpsData = {
+  latitude: 'Not available',
+  longitude: 'Not available'
+};
 
-    // Simpan data GPS dalam variabel
-    let gpsData = {
-    latitude: 'Not available',
-    longitude: 'Not available'
-    };
+// Endpoint untuk menerima data GPS dari ESP32
+app.post('/update-gps', (req, res) => {
+  gpsData.latitude = req.body.latitude;
+  gpsData.longitude = req.body.longitude;
+  console.log('Received GPS data: ', gpsData);  // Log data yang diterima
+  res.send('GPS data updated');
+});
 
-    // Endpoint untuk menerima data GPS dari ESP32
-    app.post('/update-gps', (req, res) => {
-        gpsData.latitude = req.body.latitude;
-        gpsData.longitude = req.body.longitude;
-        console.log('Received GPS data: ', gpsData);  // Log data GPS yang diterima
-        res.send('GPS data updated');
-      });
-      
-      // Endpoint untuk mengirimkan data GPS ke frontend
-    app.get('/gps-data', (req, res) => {
-    res.json(gpsData);  // Kirimkan data GPS dalam format JSON
-    });
-  
-    // Halaman utama untuk menampilkan data GPS
-    app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html')); // Menyajikan file HTML
-    });
+// Endpoint untuk mengirimkan data GPS ke frontend
+app.get('/gps-data', (req, res) => {
+  res.json(gpsData);  // Kirimkan data GPS dalam format JSON
+});
 
-    // Start the server
-    app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-    });
+// Mulai server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
